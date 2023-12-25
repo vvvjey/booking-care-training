@@ -7,6 +7,7 @@ import './ProfileDoctor.scss'
 import { NumericFormat  } from 'react-number-format';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 class ProfileDoctor extends Component {
     constructor(props){
         super(props)
@@ -22,7 +23,10 @@ class ProfileDoctor extends Component {
     }
     async componentDidUpdate(prevProps,prevState,snapshot){
         if(prevProps.doctorId !== this.props.doctorId){
-            await this.getInforDoctor(this.props.doctorId);
+            let data = await this.getInforDoctor(this.props.doctorId);
+            this.setState({
+                dataProfile:data
+            })
         }
         if(prevProps.language !== this.props.language){
 
@@ -39,17 +43,17 @@ class ProfileDoctor extends Component {
         return result
     }
     renderBookingTime = (dataTime) => {
-        console.log('dataTime ne ',dataTime)
         if (dataTime && !isEmpty(dataTime)){
+            let time = this.props.language === LANGUAGES.VI ? dataTime.timeTypeData.valueVi : dataTime.timeTypeData.valueEn
             let date = this.props.language === LANGUAGES.VI ? moment.unix(dataTime.date/1000).format('dddd - DD/MM/YYYY') 
             : moment.unix(dataTime.date/1000).locale('en').format('ddd - MM/DD/YYYY') 
             return (
                 <>
                     <div>
-                        {date}
+                        {time} - {date}
                     </div>
                     <div>
-                        khung gio
+                    <FormattedMessage id="patient.booking-modal.priceBooking"/>
                     </div>
                 </>
             )
@@ -58,7 +62,7 @@ class ProfileDoctor extends Component {
     }
     render() {
         let {dataProfile} = this.state
-        let {language} =this.props
+        let {language,isShowPrice,isShowLinkDetail,doctorId} =this.props
         let nameVi='',nameEn=''
         if(dataProfile && dataProfile.positionData){
             nameVi = `${dataProfile.positionData.valueVi}, ${dataProfile.firstName} ${dataProfile.lastName}`
@@ -92,8 +96,14 @@ class ProfileDoctor extends Component {
                         </div>
                     </div>
                 </div>
+                {isShowLinkDetail === true && 
+                    <div className='view-detail-doctor'>
+                        <Link to={`/detail-doctor/${doctorId}`}>Xem thêm </Link>
+                    </div>}
+                {isShowPrice ===true &&
+
                 <div className='price'>
-                    Giá khám:
+                    <FormattedMessage id="patient.booking-modal.price"/>
                     {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.VI &&
                         <NumericFormat 
                         className='currency'
@@ -113,6 +123,7 @@ class ProfileDoctor extends Component {
                         /> 
                     }
                 </div>
+                } 
             </div>
         );
     }

@@ -36,7 +36,15 @@
         }
         .section-body{
             // reset slick slider css
-            
+            .specialty-child{
+                cursor: pointer;
+                .specialty-name{
+                    padding: 10px 0;
+                    &:hover{
+                        color:#45c3d2;
+                    }
+                }
+            }
 
             .section-customize{
 

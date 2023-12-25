@@ -1,6 +1,8 @@
 import actionTypes from './actionTypes';
 import { getAllCodeService,createNewUserService,getAllUsers,deleteUser,editUserService
-    ,getTopDoctorHomeService,getAllDoctors,saveDetailDoctorService } from '../../services/userService';
+    ,getTopDoctorHomeService,getAllDoctors,saveDetailDoctorService,getAllSpecialty
+    ,getAllClinic
+} from '../../services/userService';
 import {toast} from "react-toastify"
 
 // GET GENDER DATA 
@@ -261,15 +263,22 @@ export const fetchRequiredDoctorInforStart = () =>{
             const resPrice = await getAllCodeService("PRICE")
             const resPayment = await getAllCodeService("PAYMENT")
             const resProvince = await getAllCodeService("PROVINCE")
-            
+            const resSpecialty = await getAllSpecialty();
+            let resClinic = await getAllClinic();
+
             if (resPrice && resPrice.errCode===0 &&
                 resPayment && resPayment.errCode===0 &&
-                resProvince && resProvince.errCode===0 
+                resProvince && resProvince.errCode===0 &&
+                resSpecialty.data && resSpecialty.data.errCode===0 &&
+                resClinic.data && resClinic.data.errCode===0
+
                 ) {
                     let data = {
                         resPrice:resPrice.data,
                         resPayment:resPayment.data,
-                        resProvince:resProvince.data
+                        resProvince:resProvince.data,
+                        resSpecialty:resSpecialty.data.data,
+                        resClinic:resClinic.data.data
                     }
                     dispatch({
                         type:actionTypes.FETCH_REQUIRED_DOCTOR_INFOR_SUCCESS,

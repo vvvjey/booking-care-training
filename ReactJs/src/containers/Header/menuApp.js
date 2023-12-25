@@ -60,11 +60,17 @@ export const adminMenu = [
 ];
 
 export const doctorMenu = [
-    { //quản lí kế hoạch khám bệnh bác sỹ
+    { 
         name: 'menu.admin.manage-user',
-        menus: [{
+        menus: [
+            {//quản lí kế hoạch khám bệnh bác sỹ
                 name:"menu.doctor.manage-schedule",
                 link:'/doctor/manage-schedule', 
-        }]
+            },
+            {  //quan ly ben nhan cua bac sy
+                name:"menu.doctor.manage-patient",
+                link:'/doctor/manage-patient', 
+            }
+        ]
     }
 ];
